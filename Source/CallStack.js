@@ -85,10 +85,18 @@ provides: [CallStack]
             }
         };
 
-    this.Stack = new Class({
+    this.CallStack = new Class({
 
         $stack: {},
         $stackLock: {},
+
+        checkStack: function(key, methodName, args) {
+            return checkStack(key, methodName, args);
+        },
+
+        releaseStackLock: function(key) {
+            releaseStackLock(key);
+        },
 
         clearStack: function(key) {
             var that = this;
@@ -97,7 +105,7 @@ provides: [CallStack]
                 initKey.call(that, key);
             }, that);
             else initKey.call(that, checkKey(key));
-        },
+        },<
 
         isStackLocked: function(key) {
             return !!this.$stackLock[checkKey(key)];

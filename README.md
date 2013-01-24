@@ -9,7 +9,7 @@ Especially useful if you start some async events (Fx, Request, etc.) in one meth
 
 Note that you cannot rely on receiving return values of synced methods as they may not be run directly but queued up for later execution.
 
-Stack-called methods will always run in the Class' instance context.
+Stack-called methods will always run in the class' instance context.
 
 How to use
 ----------
