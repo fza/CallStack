@@ -60,14 +60,11 @@ This is a very simple example, but you get the idea. JavaScript is a single-thre
 
 Note that in more sophisticated classes you may end up with more than one execution queue. This is what the key argument is used for:
 
-`this.registerSyncMethods(key, methods)`
-- or -
-`this.registerSyncMethods({key1: methods, key2: methods})`
-- or with manual synchronisation -
-`this.checkStack(key, methodName, arguments)`
+- `this.registerSyncMethods(key, methods)`
+- or: `this.registerSyncMethods({key1: methods, key2: methods})`
+- or with manual synchronisation: `this.checkStack(key, methodName, arguments)`
 
-Remember if you use manual synchronisation, you must release the queue lock on the right queue:
-`this.releaseStackLock(key)`
+Remember if you use manual synchronisation, you must release the queue lock on the right queue: `this.releaseStackLock(key)`
 
 Provided methods
 ----------------
