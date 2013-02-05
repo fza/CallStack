@@ -18,41 +18,39 @@ How to use
 
 Code explains it better:
 
-``` js
-var MyClass = new Class({
+    var MyClass = new Class({
 
-    Implements: [CallStack],
+        Implements: [CallStack],
 
-    initialize: function() {
-        this.registerSyncMethods(['doSomethingSpecial']);
-    }
+        initialize: function() {
+            this.registerSyncMethods(['doSomethingSpecial']);
+        }
 
-    startFx: function() {
-        if (!this.checkStack('startFx')) return;
+        startFx: function() {
+            if (!this.checkStack('startFx')) return;
 
-        var el = $('div.test');
+            var el = $('div.test');
 
-        new Fx.Tween(el)
-            .addEvent('complete', this.fxComplete)
-            .start('left', 50);
-    },
+            new Fx.Tween(el)
+                .addEvent('complete', this.fxComplete)
+                .start('left', 50);
+        },
 
-    fxComplete: function() {
-        /* ... */
+        fxComplete: function() {
+            /* ... */
 
-        this.releaseStackLock();
-    },
+            this.releaseStackLock();
+        },
 
-    doSomethingSpecial: function() {
-        /* ... */
-    }
-});
+        doSomethingSpecial: function() {
+            /* ... */
+        }
+    });
 
-var foo = new MyClass();
+    var foo = new MyClass();
 
-foo.startFx();
-foo.doSomethingSpecial();
-```
+    foo.startFx();
+    foo.doSomethingSpecial();
 
 What happens here? First, MyClass implements CallStack so we have access to the CallStack functionality. Within the constructor we define the methods that should be automatically synchronized. In this example we only need to register `doSomethingSpecial()`, because it is the only method we want the stack to handle synchronisation automatically. When we fire up `startFx()` it first tests if the stack is locked. If it is, then it's execution is queued. Otherwise the lock is obtained. We then start some Fx and add an event handler for the `complete` event (just as an example). Now the Fx runs, which takes some time. The execution context switches from the `startFx()` function back to the main script's context. Here we try to invoke `doSomethingSpecial()`, which is synchronized automatically. Because the stack is locked due to the running Fx, the execution of `doSomethingSpecial()` is queued for later. After the Fx is done, `fxComplete()` releases the manual stack lock, which is a trigger to work off the queue and finally invokes `doSomethingSpecial()`.
 
