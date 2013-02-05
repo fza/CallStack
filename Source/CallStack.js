@@ -8,7 +8,7 @@ description: keep method invocations in sequence in an async context
 license: MIT-style
 
 authors:
-- fza [github.com/fza]
+- fza
 
 requires:
 - [Core/Class, Core/Object, Core/Array]
@@ -91,6 +91,12 @@ provides: [CallStack]
         $stackLock: {},
 
         checkStack: function(key, methodName, args) {
+            if (arguments.length < 3) {
+                methodName = key;
+                args = methodName;
+                key = $defaultKey;
+            }
+
             return checkStack(key, methodName, args);
         },
 
