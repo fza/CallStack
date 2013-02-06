@@ -106,11 +106,11 @@ provides: [CallStack]
                 key = defaultKey;
             }
 
-            return checkStack(key, methodName, args);
+            return checkStack.call(this, key, methodName, args);
         },
 
         releaseStackLock: function(key) {
-            releaseStackLock(key);
+            releaseStackLock.call(this, key);
         },
 
         clearStack: function(key) {
