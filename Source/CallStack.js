@@ -21,11 +21,16 @@ provides: [CallStack]
 (function() {
     var defaultKey = '$default',
         checkKey = function(key) {
-            if (!key || typeOf(key) != 'string' || key.length == 0) return defaultKey;
+            if (!key || typeOf(key) !== 'string' || key.length === 0) {
+                return defaultKey;
+            }
+
             return key;
         },
         registerKey = function(key) {
-            if (!this.$stack.hasOwnProperty(key)) initKey.call(this, key);
+            if (!this.$stack.hasOwnProperty(key)) {
+                initKey.call(this, key);
+            }
         },
         initKey = function(key) {
             this.$stack[key] = [];
@@ -40,9 +45,13 @@ provides: [CallStack]
                 var original = that[methodName],
                     wrapped;
 
-                if (!original || typeOf(original) != 'function') return;
+                if (!original || typeOf(original) !== 'function') {
+                    return;
+                }
 
-                if (original.$original) original = original.$original;
+                if (original.$original) {
+                    original = original.$original;
+                }
 
                 wrapped = (function() {
                     var args = arguments,
@@ -94,7 +103,7 @@ provides: [CallStack]
             if (arguments.length < 3) {
                 methodName = key;
                 args = methodName;
-                key = $defaultKey;
+                key = defaultKey;
             }
 
             return checkStack(key, methodName, args);
@@ -107,11 +116,15 @@ provides: [CallStack]
         clearStack: function(key) {
             var that = this;
 
-            if (!key) Object.each(that.$stack, function(value, key) {
-                initKey.call(that, key);
-            }, that);
-            else initKey.call(that, checkKey(key));
-        },<
+            if (!key) {
+                Object.each(that.$stack, function(value, key) {
+                    initKey.call(that, key);
+                }, that);
+            }
+            else {
+                initKey.call(that, checkKey(key));
+            }
+        },
 
         isStackLocked: function(key) {
             return !!this.$stackLock[checkKey(key)];
@@ -125,24 +138,34 @@ provides: [CallStack]
                     'methods': Type.isArray
                 });
 
-            if (args.map) Object.each(args.map, function(methods, key) {
-                registerMethods.call(that, key, methods);
-            }, that);
-            else if (args.methods) registerMethods.call(that, args.key, args.methods);
+            if (args.map) {
+                 Object.each(args.map, function(methods, key) {
+                    registerMethods.call(that, key, methods);
+                }, that);
+            }
+            else if (args.methods) {
+                registerMethods.call(that, args.key, args.methods);
+            }
         },
 
         isMethodQueued: function(methodName, key) {
             var that = this,
                 checkMethodCallCallback = function(methodCall) {
-                    if (methodCall[0] == methodName) return true;
+                    if (methodCall[0] === methodName) {
+                        return true;
+                    }
                 };
 
-            if (!key) return that.$stack.some(function(item) {
-                return item.some(checkMethodCallCallback);
-            });
+            if (!key) {
+                return that.$stack.some(function(item) {
+                    return item.some(checkMethodCallCallback);
+                });
+            }
 
             key = checkKey(key);
-            if (that.$stack[key]) return that.$stack[key].some(checkMethodCallCallback);
+            if (that.$stack[key]) {
+                return that.$stack[key].some(checkMethodCallCallback);
+            }
 
             return false;
         }
